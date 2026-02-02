@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Important Question 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+  text-align: center;
+  overflow: hidden;
+}
+
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+h1 {
+  font-size: 1.8rem;
+}
+
+button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+#nextBtn {
+  background: #ff69b4;
+  color: white;
+}
+
+#yesBtn {
+  background: #ff4d6d;
+  color: white;
+}
+
+#noBtn {
+  background: #aaa;
+  color: white;
+  position: absolute;
+}
+
+.fade {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.celebrate {
+  font-size: 1.5rem;
+  animation: pop 0.6s infinite alternate;
+}
+
+@keyframes pop {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container fade" id="box">
+  <h1 id="text">Hey you 👀💗</h1>
+  <button id="nextBtn" onclick="nextMessage()">Tap to continue</button>
+</div>
+
+<button id="noBtn" onclick="runAway()">No 💀</button>
+
+<script>
+const messages = [
+  "Okay wait…",
+  "I made something for you 🥺",
+  "Because I’m cute like that",
+  "And you’re kind of my favourite person",
+  "So I have an important question…"
+];
+
+let index = 0;
+
+function nextMessage() {
+  const text = document.getElementById("text");
+
+  if (index < messages.length) {
+    text.innerText = messages[index];
+    index++;
+  } else {
+    showQuestion();
+  }
+}
+
+function showQuestion() {
+  document.getElementById("box").innerHTML = `
+    <h1>Will you be my Valentine? 💘</h1>
+    <button id="yesBtn" onclick="yes()">YES 💖</button>
+  `;
+  placeNoButton();
+}
+
+function yes() {
+  document.body.innerHTML = `
+    <div class="container celebrate">
+      YAY 😭💖💖💖<br>
+      You’re stuck with me now.
+    </div>
+  `;
+}
+
+function placeNoButton() {
+  const noBtn = document.getElementById("noBtn");
+  noBtn.style.left = "50%";
+  noBtn.style.top = "70%";
+}
+
+function runAway() {
+  const noBtn = document.getElementById("noBtn");
+
+  const x = Math.random() * (window.innerWidth - 100);
+  const y = Math.random() * (window.innerHeight - 50);
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+
+  noBtn.innerText = "Nice try 😌";
+}
+</script>
+
+</body>
+</html>
