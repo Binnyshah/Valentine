@@ -1,63 +1,72 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Important Question 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   height: 100vh;
-  background: linear-gradient(135deg, #ffb6c1, #ffe4e1);
+  background: linear-gradient(135deg, #ffd6e8, #fff1f7);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
-  text-align: center;
+  font-family: 'Arial Rounded MT Bold', 'Comic Sans MS', sans-serif;
   overflow: hidden;
 }
 
 .container {
   background: white;
-  padding: 30px;
-  border-radius: 20px;
+  padding: 32px;
+  border-radius: 24px;
   width: 90%;
-  max-width: 400px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  animation: fadeIn 0.8s ease;
 }
 
 h1 {
   font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1.1rem;
 }
 
 button {
-  padding: 12px 20px;
+  margin-top: 20px;
+  padding: 12px 22px;
   font-size: 1rem;
   border: none;
   border-radius: 30px;
   cursor: pointer;
-  margin: 10px;
-}
-
-#nextBtn {
   background: #ff69b4;
   color: white;
 }
 
-#yesBtn {
-  background: #ff4d6d;
-  color: white;
+button:hover {
+  transform: scale(1.05);
 }
 
 #noBtn {
-  background: #aaa;
-  color: white;
   position: absolute;
+  background: #b0b0b0;
+  display: none;
 }
 
-.fade {
-  animation: fadeIn 0.5s ease;
+.confetti, .flower {
+  position: fixed;
+  top: -10px;
+  font-size: 24px;
+  animation: fall 3s linear infinite;
 }
 
 @keyframes fadeIn {
@@ -65,44 +74,49 @@ button {
   to { opacity: 1; transform: scale(1); }
 }
 
-.celebrate {
-  font-size: 1.5rem;
-  animation: pop 0.6s infinite alternate;
+@keyframes fall {
+  to { transform: translateY(110vh); }
 }
 
-@keyframes pop {
-  from { transform: scale(1); }
-  to { transform: scale(1.1); }
+.shake {
+  animation: shake 0.3s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container fade" id="box">
+<div class="container" id="box">
   <h1 id="text">Hey you 👀💗</h1>
-  <button id="nextBtn" onclick="nextMessage()">Tap to continue</button>
+  <p id="sub">I made something just for you</p>
+  <button onclick="next()">Tap to continue</button>
 </div>
 
 <button id="noBtn" onclick="runAway()">No 💀</button>
 
 <script>
 const messages = [
-  "Okay wait…",
-  "I made something for you 🥺",
-  "Because I’m cute like that",
-  "And you’re kind of my favourite person",
-  "So I have an important question…"
+  ["Okay wait…", "Before you scroll away"],
+  ["This is serious 🥺", "Like… very serious"],
+  ["I’ve been thinking", "And thinking a LOT"],
+  ["And I have a question", "A very important one…"]
 ];
 
-let index = 0;
+let step = 0;
 
-function nextMessage() {
-  const text = document.getElementById("text");
-
-  if (index < messages.length) {
-    text.innerText = messages[index];
-    index++;
+function next() {
+  if (step < messages.length) {
+    document.getElementById("text").innerText = messages[step][0];
+    document.getElementById("sub").innerText = messages[step][1];
+    step++;
   } else {
     showQuestion();
   }
@@ -111,36 +125,47 @@ function nextMessage() {
 function showQuestion() {
   document.getElementById("box").innerHTML = `
     <h1>Will you be my Valentine? 💘</h1>
-    <button id="yesBtn" onclick="yes()">YES 💖</button>
+    <button onclick="yes()">YES 💖</button>
   `;
-  placeNoButton();
-}
-
-function yes() {
-  document.body.innerHTML = `
-    <div class="container celebrate">
-      YAY 😭💖💖💖<br>
-      You’re stuck with me now.
-    </div>
-  `;
-}
-
-function placeNoButton() {
   const noBtn = document.getElementById("noBtn");
+  noBtn.style.display = "block";
   noBtn.style.left = "50%";
   noBtn.style.top = "70%";
 }
 
+function yes() {
+  document.body.innerHTML = `
+    <div class="container">
+      <h1>YAY 😭💖</h1>
+      <p>You are officially stuck with me now.</p>
+    </div>
+  `;
+  launchCelebration();
+}
+
 function runAway() {
   const noBtn = document.getElementById("noBtn");
+  document.body.classList.add("shake");
 
-  const x = Math.random() * (window.innerWidth - 100);
-  const y = Math.random() * (window.innerHeight - 50);
+  setTimeout(() => {
+    document.body.classList.remove("shake");
+  }, 300);
 
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
+  noBtn.innerText = "What do you mean NO? 😡";
 
-  noBtn.innerText = "Nice try 😌";
+  noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+}
+
+function launchCelebration() {
+  for (let i = 0; i < 40; i++) {
+    const item = document.createElement("div");
+    item.className = Math.random() > 0.5 ? "confetti" : "flower";
+    item.innerText = Math.random() > 0.5 ? "🎉" : "🌸";
+    item.style.left = Math.random() * 100 + "vw";
+    item.style.animationDuration = 2 + Math.random() * 2 + "s";
+    document.body.appendChild(item);
+  }
 }
 </script>
 
