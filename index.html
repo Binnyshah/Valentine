@@ -6,9 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -24,7 +22,7 @@ body {
 .container {
   background: white;
   padding: 32px;
-  border-radius: 24px;
+  border-radius: 26px;
   width: 90%;
   max-width: 420px;
   text-align: center;
@@ -39,6 +37,7 @@ h1 {
 
 p {
   font-size: 1.1rem;
+  margin-top: 0;
 }
 
 button {
@@ -50,6 +49,7 @@ button {
   cursor: pointer;
   background: #ff69b4;
   color: white;
+  transition: transform 0.2s ease;
 }
 
 button:hover {
@@ -58,7 +58,7 @@ button:hover {
 
 #noBtn {
   position: absolute;
-  background: #b0b0b0;
+  background: #9e9e9e;
   display: none;
 }
 
@@ -84,9 +84,9 @@ button:hover {
 
 @keyframes shake {
   0% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
   100% { transform: translateX(0); }
 }
 </style>
@@ -102,15 +102,19 @@ button:hover {
 
 <button id="noBtn" onclick="runAway()">No 💀</button>
 
+<!-- Lottie Player -->
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
 <script>
 const messages = [
-  ["Okay wait…", "Before you scroll away"],
-  ["This is serious 🥺", "Like… very serious"],
-  ["I’ve been thinking", "And thinking a LOT"],
+  ["Okay wait…", "Don’t rush this"],
+  ["This is serious 🥺", "Like… actually serious"],
+  ["I’ve been thinking", "A LOT"],
   ["And I have a question", "A very important one…"]
 ];
 
 let step = 0;
+let noClicks = 0;
 
 function next() {
   if (step < messages.length) {
@@ -124,9 +128,21 @@ function next() {
 
 function showQuestion() {
   document.getElementById("box").innerHTML = `
-    <h1>Will you be my Valentine? 💘</h1>
+    <div id="animationArea">
+      <lottie-player
+        src="https://assets10.lottiefiles.com/packages/lf20_jbrw3hcz.json"
+        background="transparent"
+        speed="1"
+        style="width: 220px; height: 220px; margin: auto;"
+        loop
+        autoplay>
+      </lottie-player>
+    </div>
+
+    <h1 id="questionText">Will you be my Valentine? 💘</h1>
     <button onclick="yes()">YES 💖</button>
   `;
+
   const noBtn = document.getElementById("noBtn");
   noBtn.style.display = "block";
   noBtn.style.left = "50%";
@@ -144,17 +160,40 @@ function yes() {
 }
 
 function runAway() {
+  noClicks++;
+
   const noBtn = document.getElementById("noBtn");
+  const animationArea = document.getElementById("animationArea");
+  const questionText = document.getElementById("questionText");
+
   document.body.classList.add("shake");
+  setTimeout(() => document.body.classList.remove("shake"), 300);
 
-  setTimeout(() => {
-    document.body.classList.remove("shake");
-  }, 300);
+  if (noClicks === 1) {
+    animationArea.innerHTML = `
+      <lottie-player
+        src="https://assets4.lottiefiles.com/packages/lf20_gkxr7k1z.json"
+        background="transparent"
+        speed="1"
+        style="width: 220px; height: 220px; margin: auto;"
+        loop
+        autoplay>
+      </lottie-player>
+    `;
+    questionText.innerText = "Excuse me?? 😐";
+    noBtn.innerText = "TRY AGAIN";
 
-  noBtn.innerText = "What do you mean NO? 😡";
+  } else if (noClicks === 2) {
+    questionText.innerText = "That was not a suggestion.";
+    noBtn.innerText = "LAST CHANCE";
 
-  noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
-  noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+  } else {
+    questionText.innerText = "You are testing my patience 🙂";
+    noBtn.innerText = "OK OK";
+  }
+
+  noBtn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 60) + "px";
 }
 
 function launchCelebration() {
